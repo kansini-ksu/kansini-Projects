@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>แบบทดสอบหลังเรียน | การเปลี่ยนแปลงของเทคโนโลยี</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@300;400;500;600&family=Mitr:wght@400;500;600&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ซ่อนทั้งหน้าไว้ก่อน จนกว่าจะตรวจแล้วว่าล็อกอินอยู่ (กันคนเปิดไฟล์ตรงๆ เห็นเนื้อหา) */
+  html:not(.ok) body{visibility:hidden}
+
+  :root{
+    --ink:#ffffff;
+    --ink-soft:rgba(255,255,255,.78);
+    --cyan:#b9e36f;
+    --blue:#2b7a2f;
+    --gold:#ffd43b;
+    --glass:rgba(255,255,255,.14);
+    --glass-line:rgba(255,255,255,.34);
+    --navy:#0f2a17;
+    --nav-w:290px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Inter","Noto Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;
+    color:var(--ink);min-height:100vh;
+    background:linear-gradient(180deg,#2f86d9 0%,#7cbcf0 42%,#6cbf45 72%,#3f8f2a 100%);
+    overflow-x:hidden;
+  }
+  button{font:inherit;color:inherit}
+  a{color:inherit;text-decoration:none}
+
+  /* ---------- พื้นหลัง (ชุดเดียวกับหน้าแรก) ---------- */
+  .bg{position:fixed;inset:0;z-index:-1;background:#0f2a17;overflow:hidden}
+  .bg img,.bg video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .bg video{opacity:0;transition:opacity .8s ease}
+  .bg video.ready{opacity:1}
+  .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,20,40,.4),rgba(0,20,40,.3) 50%,rgba(0,20,40,.5))}
+
+  /* ---------- แถบบน ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:30;
+    display:flex;align-items:center;gap:14px;
+    padding:12px clamp(14px,3vw,32px);
+    padding-top:max(12px,env(safe-area-inset-top));
+    background:linear-gradient(180deg,rgba(10,40,20,.55),rgba(10,40,20,.35));
+    -webkit-backdrop-filter:blur(16px) saturate(130%);backdrop-filter:blur(16px) saturate(130%);
+    border-bottom:1px solid var(--glass-line);
+  }
+  .burger{
+    display:none;width:44px;height:44px;flex:none;border-radius:50%;cursor:pointer;
+    background:var(--glass);border:1px solid var(--glass-line);place-items:center;
+  }
+  .burger svg{width:22px;height:22px;stroke:#fff;stroke-width:2.2;stroke-linecap:round;fill:none}
+  .brand{
+    flex:1;min-width:0;
+    font-family:"Fredoka","Mitr","Noto Sans Thai",sans-serif;font-weight:600;
+    font-size:clamp(.95rem,2.2vw,1.2rem);line-height:1.25;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    text-shadow:0 2px 10px rgba(0,30,60,.45);
+  }
+  .brand small{display:block;font-family:"Inter","Noto Sans Thai",sans-serif;font-weight:300;font-size:.74rem;color:var(--ink-soft)}
+  .user{display:flex;align-items:center;gap:10px;flex:none}
+  .user .who{
+    display:flex;align-items:center;gap:9px;padding:5px 14px 5px 5px;border-radius:99px;
+    background:var(--glass);border:1px solid var(--glass-line);font-size:.88rem;max-width:230px;
+  }
+  .user .who .dot{
+    width:30px;height:30px;flex:none;border-radius:50%;display:grid;place-items:center;
+    background:rgba(185,227,111,.22);border:1.5px solid var(--cyan);
+  }
+  .user .who .dot svg{width:16px;height:16px;fill:#fff}
+  .user .who span.n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .logout{
+    height:40px;padding:0 18px;border-radius:99px;cursor:pointer;font-weight:500;font-size:.88rem;
+    background:rgba(255,255,255,.1);border:1px solid var(--glass-line);
+    transition:background .2s,border-color .2s;
+  }
+  .logout:hover{background:rgba(255,255,255,.22);border-color:var(--gold);color:var(--gold)}
+
+  /* ---------- โครงหน้า ---------- */
+  .shell{
+    max-width:1320px;margin:0 auto;
+    padding:clamp(16px,3vw,32px) clamp(14px,3vw,32px) 40px;
+    display:grid;grid-template-columns:var(--nav-w) minmax(0,1fr);gap:clamp(16px,2.6vw,30px);
+    align-items:start;
+  }
+
+  /* ---------- เมนูข้าง ---------- */
+  .nav{
+    position:sticky;top:96px;
+    max-height:calc(100vh - 120px);overflow-y:auto;
+    padding:16px 12px;border-radius:28px;
+    background:linear-gradient(160deg,rgba(255,255,255,.22),rgba(255,255,255,.08));
+    border:1px solid var(--glass-line);
+    -webkit-backdrop-filter:blur(22px) saturate(130%);backdrop-filter:blur(22px) saturate(130%);
+    box-shadow:0 24px 60px rgba(0,25,55,.35),inset 0 1px 0 rgba(255,255,255,.4);
+    scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.4) transparent;
+  }
+  .nav h2{
+    font-family:"Fredoka","Mitr","Noto Sans Thai",sans-serif;font-size:1.15rem;font-weight:600;
+    padding:4px 12px 12px;
+  }
+  .nav ul{list-style:none}
+  .nav li+li{margin-top:4px}
+
+  .item,.group-btn{
+    width:100%;display:flex;align-items:center;gap:12px;text-align:left;
+    min-height:48px;padding:8px 12px;border-radius:18px;cursor:pointer;
+    background:transparent;border:1px solid transparent;
+    font-size:.95rem;font-weight:400;line-height:1.35;
+    transition:background .18s,border-color .18s;
+  }
+  .item:hover,.group-btn:hover{background:rgba(255,255,255,.14)}
+  .no{
+    flex:none;min-width:34px;height:34px;padding:0 8px;border-radius:99px;
+    display:grid;place-items:center;
+    font-family:"Fredoka",sans-serif;font-weight:600;font-size:.88rem;
+    background:rgba(255,255,255,.16);border:1px solid var(--glass-line);
+  }
+  .txt{flex:1;min-width:0}
+  .chev{flex:none;width:18px;height:18px;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;fill:none;transition:transform .25s}
+  .group-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+
+  .item.active{
+    background:rgba(185,227,111,.2);border-color:var(--cyan);
+    box-shadow:0 0 18px rgba(185,227,111,.28);font-weight:600;
+  }
+  .item.active .no{background:var(--cyan);border-color:var(--cyan);color:var(--navy)}
+
+  .sub{list-style:none;margin:4px 0 6px 22px;padding-left:12px;border-left:2px solid rgba(185,227,111,.45);display:none}
+  .sub.open{display:block}
+  .sub .item{min-height:44px;font-size:.92rem}
+  .sub .no{min-width:38px;height:30px;font-size:.8rem}
+
+  /* ---------- เนื้อหากลางหน้า ---------- */
+  .content{min-width:0}
+  .panel{
+    border-radius:30px;
+    padding:clamp(26px,4vw,52px) clamp(20px,4.4vw,60px) clamp(28px,4vw,48px);
+    background:linear-gradient(160deg,rgba(255,255,255,.22),rgba(255,255,255,.08));
+    border:1px solid var(--glass-line);
+    -webkit-backdrop-filter:blur(22px) saturate(130%);backdrop-filter:blur(22px) saturate(130%);
+    box-shadow:0 24px 60px rgba(0,25,55,.35),inset 0 1px 0 rgba(255,255,255,.4);
+  }
+  .panel header{text-align:center}
+  .panel h1{
+    font-family:"Fredoka","Mitr","Noto Sans Thai",sans-serif;
+    font-size:clamp(2rem,5vw,3.2rem);font-weight:700;line-height:1.25;
+    text-shadow:0 4px 24px rgba(0,30,60,.45);
+  }
+  .panel .bar{display:block;width:124px;height:5px;margin:16px auto 0;border-radius:99px;background:var(--cyan);box-shadow:0 0 18px rgba(185,227,111,.7)}
+  .lead{
+    max-width:60ch;margin:22px auto 0;text-align:center;
+    font-size:clamp(1rem,2.2vw,1.2rem);font-weight:300;color:var(--ink);
+    text-shadow:0 2px 12px rgba(0,30,60,.4);
+  }
+
+  .goals{list-style:none;max-width:760px;margin:30px auto 0}
+  .goals li{
+    display:flex;gap:16px;align-items:flex-start;
+    padding:18px 4px;border-top:1px solid rgba(255,255,255,.22);
+    font-size:clamp(1rem,2.1vw,1.12rem);line-height:1.65;
+  }
+  .goals li:last-child{border-bottom:1px solid rgba(255,255,255,.22)}
+  .goals .tick{
+    flex:none;width:36px;height:36px;margin-top:1px;border-radius:50%;display:grid;place-items:center;
+    background:rgba(185,227,111,.2);border:1.5px solid var(--cyan);box-shadow:0 0 14px rgba(185,227,111,.4);
+  }
+  .goals .tick svg{width:18px;height:18px;stroke:var(--cyan);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;fill:none}
+
+  .next{max-width:760px;margin:30px auto 0;display:flex;justify-content:center}
+  .btn{
+    min-width:min(100%,320px);height:54px;padding:0 34px;border:0;border-radius:99px;cursor:pointer;
+    font-weight:600;font-size:1.02rem;color:#fff;
+    background:linear-gradient(90deg,var(--blue),#5aa83a);
+    box-shadow:0 10px 24px rgba(43,122,47,.45);
+    transition:transform .15s,box-shadow .15s;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:0 14px 28px rgba(43,122,47,.55)}
+
+  footer{margin-top:28px;text-align:center;font-size:.82rem;color:rgba(255,255,255,.75)}
+
+  /* ---------- หน้าคำชี้แจงแบบทดสอบ ---------- */
+  .panel h1.with-icon{display:flex;align-items:center;justify-content:center;gap:clamp(10px,1.6vw,16px)}
+  .panel h1.with-icon svg{flex:none;width:.95em;height:.95em;stroke:var(--gold);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none;filter:drop-shadow(0 2px 10px rgba(255,212,59,.45))}
+  .badge{
+    width:clamp(96px,14vw,124px);height:clamp(96px,14vw,124px);margin:clamp(24px,3.4vw,38px) auto 0;
+    border-radius:50%;display:grid;place-items:center;
+    background:rgba(185,227,111,.16);border:2px solid var(--cyan);
+    box-shadow:0 0 34px rgba(185,227,111,.45),inset 0 1px 0 rgba(255,255,255,.4);
+  }
+  .badge svg{width:52%;height:52%;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;fill:none}
+  .panel h2.sec{
+    margin-top:clamp(18px,2.6vw,28px);text-align:center;
+    font-family:"Fredoka","Mitr","Noto Sans Thai",sans-serif;font-weight:700;
+    font-size:clamp(1.5rem,3.2vw,2rem);text-shadow:0 3px 16px rgba(0,30,60,.4);
+  }
+  .intro{
+    max-width:62ch;margin:14px auto 0;text-align:center;
+    font-size:clamp(1rem,2.1vw,1.12rem);line-height:1.75;font-weight:400;
+    text-shadow:0 2px 12px rgba(0,30,60,.4);
+  }
+  .info{
+    max-width:640px;margin:clamp(22px,3vw,32px) auto 0;padding:clamp(14px,2.4vw,22px) clamp(18px,3vw,32px);
+    border-radius:22px;list-style:none;
+    background:rgba(255,255,255,.12);border:1px solid var(--glass-line);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.3);
+  }
+  .info li{display:flex;gap:14px;align-items:baseline;padding:10px 0;font-size:clamp(.98rem,2vw,1.08rem);line-height:1.55}
+  .info li+li{border-top:1px solid rgba(255,255,255,.16)}
+  .info li::before{
+    content:"";flex:none;width:0;height:0;transform:translateY(1px);
+    border-left:10px solid var(--cyan);border-top:6px solid transparent;border-bottom:6px solid transparent;
+    filter:drop-shadow(0 0 6px rgba(185,227,111,.6));
+  }
+  .info b{font-weight:600;color:var(--gold)}
+  .actions{margin-top:clamp(26px,3.6vw,38px);display:flex;flex-wrap:wrap;justify-content:center;gap:16px}
+  .actions .btn,.btn-ghost{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    min-width:240px;height:54px;padding:0 30px;border-radius:99px;cursor:pointer;
+    font-weight:600;font-size:1.02rem;text-decoration:none;
+  }
+  .actions .btn svg,.btn-ghost svg{width:18px;height:18px;flex:none}
+  .actions .btn svg{fill:#fff}
+  .btn-ghost{
+    color:#fff;background:rgba(255,255,255,.1);border:1px solid var(--glass-line);
+    transition:background .2s,border-color .2s,color .2s;
+  }
+  .btn-ghost svg{stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;fill:none}
+  .btn-ghost:hover{background:rgba(255,255,255,.22);border-color:var(--gold);color:var(--gold)}
+  @media (max-width:600px){
+    .actions{flex-direction:column-reverse;align-items:stretch}
+    .actions .btn,.btn-ghost{min-width:0;width:100%}
+  }
+
+  /* ---------- แจ้งเตือนสั้นๆ ---------- */
+  .toast{
+    position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom));z-index:60;
+    transform:translate(-50%,20px);opacity:0;pointer-events:none;
+    max-width:min(92vw,420px);padding:12px 22px;border-radius:99px;text-align:center;font-size:.92rem;
+    background:rgba(15,42,23,.92);border:1px solid var(--gold);color:var(--gold);
+    transition:opacity .25s,transform .25s;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+  /* ---------- มือถือ/แท็บเล็ต: เมนูเลื่อนออกจากด้านซ้าย ---------- */
+  .scrim{position:fixed;inset:0;z-index:40;background:rgba(0,20,40,.55);opacity:0;pointer-events:none;transition:opacity .25s}
+  .scrim.show{opacity:1;pointer-events:auto}
+
+  @media (max-width:900px){
+    .burger{display:grid}
+    .shell{grid-template-columns:1fr}
+    .nav{
+      position:fixed;z-index:50;top:0;left:0;bottom:0;
+      width:min(86vw,330px);max-height:none;border-radius:0 28px 28px 0;
+      padding-top:max(16px,env(safe-area-inset-top));
+      background:linear-gradient(160deg,rgba(18,58,32,.97),rgba(30,84,44,.95));
+      transform:translateX(-105%);transition:transform .3s cubic-bezier(.4,.2,.2,1);
+    }
+    .nav.open{transform:none}
+    .user .who{display:none}
+  }
+  @media (max-width:520px){
+    .brand small{display:none}
+    .logout{padding:0 14px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;scroll-behavior:auto!important}
+  }
+</style>
+</head>
+<body>
+
+<noscript><p style="visibility:visible;padding:24px;color:#fff;background:#0f2a17">ต้องเปิดใช้งาน JavaScript เพื่อใช้งานหน้านี้</p></noscript>
+
+<div class="bg" id="bg" aria-hidden="true">
+  <img id="bgImg" alt="" hidden>
+  <video id="bgVideo" muted loop playsinline preload="auto" disablepictureinpicture hidden></video>
+</div>
+
+<div class="topbar">
+  <button class="burger" id="burger" type="button" aria-label="เปิดเมนู" aria-controls="nav" aria-expanded="false">
+    <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <div class="brand">แอปพลิเคชันแบบสถานการณ์จำลอง<small>เรื่อง การเปลี่ยนแปลงของเทคโนโลยี</small></div>
+  <div class="user">
+    <div class="who" title="ผู้ใช้งาน">
+      <span class="dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"/></svg></span>
+      <span class="n" id="userName">...</span>
+    </div>
+    <button class="logout" id="logout" type="button">ออกจากระบบ</button>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+
+<div class="shell">
+  <nav class="nav" id="nav" aria-label="เมนูการใช้งาน">
+    <h2>เมนูการใช้งาน</h2>
+    <ul id="menu"></ul>
+  </nav>
+
+  <main class="content">
+    <section class="panel" aria-labelledby="pageTitle">
+      <header>
+        <h1 id="pageTitle" class="with-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 4h6v2.2H9z"/><path d="M9 17v-3M12 17v-5M15 17v-2"/></svg>
+          แบบทดสอบหลังเรียน
+        </h1>
+        <span class="bar"></span>
+      </header>
+
+      <div class="badge" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-5"/><path d="M17.5 3.5l3 3L12 15l-4 1 1-4z"/></svg>
+      </div>
+
+      <h2 class="sec">คำชี้แจง</h2>
+      <p class="intro">แบบทดสอบนี้จัดทำขึ้นเพื่อวัดความรู้ของนักเรียนหลังเรียนจบบทเรียนที่ 1 และบทเรียนที่ 2<br>คะแนนที่ได้จะนำไปเปรียบเทียบกับคะแนนก่อนเรียน เพื่อให้ทราบพัฒนาการของตนเอง</p>
+
+      <!-- แก้ตัวเลข/ข้อความคำชี้แจงได้ที่นี่ -->
+      <ul class="info">
+        <li><span><b>จำนวนข้อสอบ:</b> 10 ข้อ</span></li>
+        <li><span><b>คะแนนเต็ม:</b> 10 คะแนน</span></li>
+        <li><span><b>รูปแบบ:</b> ปรนัย 4 ตัวเลือก</span></li>
+        <li><span><b>เกณฑ์:</b> เลือกคำตอบที่ถูกต้องที่สุด</span></li>
+      </ul>
+
+      <div class="actions">
+        <a class="btn-ghost" id="goBack" href="decision2.html">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>กลับสู่การตัดสินใจ บทที่ 2
+        </a>
+        <button class="btn" id="goStart" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>เริ่มทำแบบทดสอบ
+        </button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =========================================================
+   พื้นหลัง — ใส่ค่าให้เหมือนกับที่ตั้งไว้ใน index.html
+   ========================================================= */
+const BG_VIDEO = "img/bg.mp4";
+const BG_IMAGE = "img/....";      // ← ใส่ชื่อไฟล์รูปให้ตรงกับใน index.html
+
+(function initBackground(){
+  const bg = document.getElementById("bg"), img = document.getElementById("bgImg"), vid = document.getElementById("bgVideo");
+  img.onload = () => { img.hidden = false; };
+  img.src = BG_IMAGE;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const saver  = navigator.connection && navigator.connection.saveData;
+  if (reduce || saver) return;
+  vid.hidden = false; vid.muted = true;
+  vid.addEventListener("playing", () => vid.classList.add("ready"), { once: true });
+  vid.addEventListener("error", () => { vid.hidden = true; }, { once: true });
+  vid.src = BG_VIDEO;
+  const pr = vid.play(); if (pr && pr.catch) pr.catch(() => { vid.hidden = true; });
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+/* =========================================================
+   ตั้งค่า
+   ========================================================= */
+const SUPABASE_URL      = "https://bhmkjjdruckmtnkdwanc.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_Shzi7NdOwBdI4ijpZ4xgwA_WbUZmmZr";
+const LOGIN_PAGE        = "index.html";
+const CURRENT_ID        = "posttest";     // เมนูที่กำลังเปิดอยู่ในหน้านี้
+
+/* รายการเมนู — href ว่าง = หน้ายังไม่ได้สร้าง (กดแล้วขึ้นแจ้งเตือน)
+   พอสร้างหน้าไหนเสร็จ ให้ใส่ชื่อไฟล์ที่ href ของเมนูนั้น */
+const MENU = [
+  { id:"objective", no:"1", label:"วัตถุประสงค์",        href:"objectives.html" },
+  { id:"pretest",   no:"2", label:"แบบทดสอบก่อนเรียน",   href:"pretest.html" },
+  { id:"lesson1",   no:"3", label:"บทเรียนที่ 1", children:[
+      { id:"l1-content",   no:"3.1", label:"เนื้อหาบทที่ 1",    href:"lesson1.html" },
+      { id:"l1-situation", no:"3.2", label:"สถานการณ์ บทที่ 1", href:"situation1.html" },
+      { id:"l1-decision",  no:"3.3", label:"ตัดสินใจ",           href:"decision1.html" } ]},
+  { id:"lesson2",   no:"4", label:"บทเรียนที่ 2", children:[
+      { id:"l2-content",   no:"4.1", label:"เนื้อหาบทที่ 2",    href:"lesson2.html" },
+      { id:"l2-situation", no:"4.2", label:"สถานการณ์ บทที่ 2", href:"situation2.html" },
+      { id:"l2-decision",  no:"4.3", label:"ตัดสินใจ",           href:"decision2.html" } ]},
+  { id:"posttest",  no:"5", label:"แบบทดสอบหลังเรียน",   href:"posttest.html" },
+  { id:"score",     no:"6", label:"สรุปผลคะแนน",         href:"" },
+  { id:"survey",    no:"7", label:"แบบประเมิน",          href:"" },
+  { id:"credits",   no:"8", label:"ผู้จัดทำ",            href:"" }
+];
+const QUIZ_PAGE = "posttest-quiz.html";                      // ใส่ชื่อไฟล์หน้าทำแบบทดสอบ เมื่อสร้างเสร็จ (เว้นว่าง = ขึ้นแจ้งเตือนว่ากำลังจัดทำ)
+
+const $ = id => document.getElementById(id);
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* =========================================================
+   ด่านตรวจ: ไม่ล็อกอิน = เด้งกลับหน้าแรกทันที (ไม่แสดงเนื้อหา)
+   ========================================================= */
+function kickOut(){ location.replace(LOGIN_PAGE); }
+
+async function guard(){
+  try{
+    const { data:{ session } } = await sb.auth.getSession();
+    if (!session) { kickOut(); return null; }
+    return session;
+  }catch(e){ kickOut(); return null; }
+}
+
+/* ออกจากระบบจากแท็บอื่น / กดปุ่ม Back หลังออกจากระบบ → เช็กซ้ำ */
+sb.auth.onAuthStateChange(ev => { if (ev === "SIGNED_OUT") kickOut(); });
+window.addEventListener("pageshow", e => { if (e.persisted) { document.documentElement.classList.remove("ok"); guard().then(s => s && document.documentElement.classList.add("ok")); } });
+
+/* =========================================================
+   เมนู
+   ========================================================= */
+const toast = (() => { let t; return msg => { const el = $("toast"); el.textContent = msg; el.classList.add("show"); clearTimeout(t); t = setTimeout(() => el.classList.remove("show"), 2200); }; })();
+
+function findItem(id){
+  for (const m of MENU){ if (m.id === id) return m; for (const c of (m.children||[])) if (c.id === id) return c; }
+}
+function itemEl(m, sub){
+  const a = document.createElement("a");
+  a.className = "item" + (m.id === CURRENT_ID ? " active" : "");
+  a.href = m.href || "#";
+  a.dataset.id = m.id;
+  if (m.id === CURRENT_ID) a.setAttribute("aria-current", "page");
+  a.innerHTML = `<span class="no">${m.no}</span><span class="txt">${m.label}</span>`;
+  return a;
+}
+function buildMenu(){
+  const ul = $("menu");
+  MENU.forEach(m => {
+    const li = document.createElement("li");
+    if (!m.children){ li.appendChild(itemEl(m)); ul.appendChild(li); return; }
+
+    const hasActive = m.children.some(c => c.id === CURRENT_ID);
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.className = "group-btn";
+    btn.setAttribute("aria-expanded", "true");
+    btn.setAttribute("aria-controls", "sub-" + m.id);
+    btn.innerHTML = `<span class="no">${m.no}</span><span class="txt">${m.label}</span>
+      <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`;
+    const sub = document.createElement("ul");
+    sub.className = "sub open"; sub.id = "sub-" + m.id;
+    m.children.forEach(c => { const l = document.createElement("li"); l.appendChild(itemEl(c, true)); sub.appendChild(l); });
+    btn.onclick = () => {
+      const open = sub.classList.toggle("open");
+      btn.setAttribute("aria-expanded", String(open));
+    };
+    li.append(btn, sub); ul.appendChild(li);
+  });
+
+  ul.addEventListener("click", e => {
+    const a = e.target.closest("a.item"); if (!a) return;
+    const it = findItem(a.dataset.id);
+    if (!it.href){ e.preventDefault(); toast("หน้านี้กำลังจัดทำ ยังเปิดใช้งานไม่ได้"); }
+    else closeNav();
+  });
+}
+
+/* เมนูมือถือ */
+function openNav(){ $("nav").classList.add("open"); $("scrim").classList.add("show"); $("burger").setAttribute("aria-expanded","true"); }
+function closeNav(){ $("nav").classList.remove("open"); $("scrim").classList.remove("show"); $("burger").setAttribute("aria-expanded","false"); }
+$("burger").onclick = () => $("nav").classList.contains("open") ? closeNav() : openNav();
+$("scrim").onclick = closeNav;
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeNav(); });
+
+/* ปุ่มเริ่มทำแบบทดสอบ */
+$("goStart").onclick = () => {
+  if (QUIZ_PAGE) location.href = QUIZ_PAGE; else toast("หน้าทำแบบทดสอบกำลังจัดทำ ยังเปิดใช้งานไม่ได้");
+};
+
+/* ออกจากระบบ */
+$("logout").onclick = async () => { await sb.auth.signOut(); kickOut(); };
+
+/* =========================================================
+   เริ่มทำงาน
+   ========================================================= */
+(async () => {
+  const session = await guard();
+  if (!session) return;
+
+  buildMenu();
+  document.documentElement.classList.add("ok");      // ผ่านด่านแล้ว ค่อยแสดงหน้า
+
+  const meta = session.user.user_metadata || {};
+  $("userName").textContent = meta.full_name || meta.username || "ผู้ใช้งาน";
+  if (!meta.full_name){
+    const { data:p } = await sb.from("profiles").select("full_name").eq("id", session.user.id).maybeSingle();
+    if (p && p.full_name) $("userName").textContent = p.full_name;
+  }
+})();
+</script>
+</body>
+</html>
