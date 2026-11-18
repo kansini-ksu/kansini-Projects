@@ -498,11 +498,12 @@
     /* กรอบการ์ด: ยุบ/ขยายด้วย clip-path ตรง ๆ จังหวะเวลาเท่าบนคอม */
     .flip-inner{
       transform:translateZ(0);
+      overflow:hidden;   /* ★ กั้นไม่ให้วงแหวน/แสงกวาดล้นนอกการ์ด (เดิมล้นจนหน้าเว็บกว้างเกินจอ มือถือซูมออก/เลื่อนหน้าเอง) */
       clip-path:inset(0 0 0 0 round 26px);
       transition:height .5s cubic-bezier(.4,.2,.2,1),clip-path .6s cubic-bezier(.65,0,.35,1);
     }
     .flip-inner.m-out{
-      clip-path:inset(calc(50% - 36px) calc(50% - 36px) calc(50% - 36px) calc(50% - 36px) round 24px);
+      clip-path:inset(calc(var(--cy,50%) - 36px) calc(50% - 36px) calc(100% - var(--cy,50%) - 36px) calc(50% - 36px) round 24px);
       transition:height .5s cubic-bezier(.4,.2,.2,1),clip-path .62s .06s cubic-bezier(.65,0,.35,1);
     }
     /* เนื้อการ์ดสีขาว: ตอนหดหดก่อน ตอนขยายตามมาทีหลัง */
@@ -511,7 +512,7 @@
       transition:clip-path .72s .16s cubic-bezier(.65,0,.35,1),background .4s;
     }
     .flip-inner.m-out::before{
-      clip-path:inset(calc(50% - 36px) calc(50% - 36px) calc(50% - 36px) calc(50% - 36px) round 22.5px);
+      clip-path:inset(calc(var(--cy,50%) - 37.5px) calc(50% - 36px) calc(100% - var(--cy,50%) - 34.5px) calc(50% - 36px) round 22.5px);
       transition:clip-path .55s cubic-bezier(.65,0,.35,1),background .4s;
     }
 
@@ -532,6 +533,13 @@
 
     /* วงแหวนคลื่นขยาย: ลดขนาดปลายทางลง (เดิมขยาย 10 เท่า ภาพใหญ่เกินไปสำหรับมือถือ) */
     @keyframes expand{0%{transform:scale(.8);opacity:.95}100%{transform:scale(5);opacity:0}}
+
+
+    /* ★ ตรึงตำแหน่งไอคอนกลางการ์ดให้นิ่ง ตอนสลับฟอร์มที่ความสูงไม่เท่ากัน (แก้อาการภาพลอยขยับตามความสูง) */
+    .core,.ring{top:var(--cy,50%)}
+    .flip-inner.m-out .corner.tl{top:calc(var(--cy,50%) - 31px)}
+    .flip-inner.m-out .corner.br{bottom:calc(100% - var(--cy,50%) - 31px)}
+    .flip::before{transform-origin:50% calc(var(--cy,50%) - 14px)}
 
     /* เงาเรืองใต้การ์ด: ลดเบลอให้เบาลง */
     .flip::before{filter:blur(22px)}
@@ -876,6 +884,7 @@ function show(which){
   morphBusy = true;
   const inner = $("flipInner");
   inner.classList.remove("intro");
+  inner.parentElement.style.setProperty("--cy", (inner.offsetHeight / 2) + "px");   /* ตรึงจุดที่ไอคอนจะยุบเข้าไป ไม่ให้ลอยตามความสูงที่เปลี่ยน (มือถือ) */
   inner.classList.add("m-out");                                   /* เนื้อหาเบลอหาย + การ์ดทั้งใบและแท็บมุมยุบเข้ากลาง */
   setTimeout(() => inner.classList.add("m-icon"), 600);           /* ไอคอนเรืองแสง + วงแหวนกระจาย */
   setTimeout(() => swapFace(which), 720);                         /* สลับฟอร์ม (ตอนนี้มองไม่เห็นเนื้อหา) */
