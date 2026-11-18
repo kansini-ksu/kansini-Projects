@@ -555,7 +555,7 @@
         <span class="chip-lesson">บทเรียนที่ 1</span>
         <h1 id="pageTitle">การเปลี่ยนแปลงของเทคโนโลยี</h1>
         <span class="bar"></span>
-        <p class="lead">ดูวิดีโอ ศึกษาอินโฟกราฟิก และอ่านเอกสารก่อนสอน ให้ครบก่อนเริ่มทำสถานการณ์จำลอง</p>
+        <p class="lead">ดูวิดีโอ ศึกษาอินโฟกราฟิก และเอกสารใบความรู้ ให้ครบก่อนเริ่มทำสถานการณ์จำลอง</p>
       </header>
 
       <section class="block" aria-labelledby="h-video">
@@ -587,7 +587,7 @@
       </section>
 
       <section class="block" aria-labelledby="h-doc">
-        <div class="bh"><span class="bn">3</span><h2 id="h-doc">เอกสารก่อนสอน</h2></div>
+        <div class="bh"><span class="bn">3</span><h2 id="h-doc">เอกสารใบความรู้</h2></div>
         <p class="hint">เปิดอ่านบนหน้าเว็บ หรือดาวน์โหลดเก็บไว้ได้</p>
         <ul class="docs" id="docs"></ul>
       </section>
@@ -641,8 +641,8 @@ const MENU = [
 ];
 
 // --- วิดีโอ: เลือกอย่างใดอย่างหนึ่ง ---
-const VIDEO_YOUTUBE = "";                  // ใส่ ID ของ YouTube เช่น "dQw4w9WgXcQ" (ถ้าใส่ จะใช้อันนี้ก่อน)
-const VIDEO_FILE    = "img/lesson1.mp4";   // หรือไฟล์วิดีโอในโฟลเดอร์ img
+const VIDEO_YOUTUBE = "-Go8x80c1DU?si=yVUy4kaWlFeYcrAJ";                  // ใส่ ID ของ YouTube เช่น "dQw4w9WgXcQ" (ถ้าใส่ จะใช้อันนี้ก่อน)
+const VIDEO_FILE    = "";   // หรือไฟล์วิดีโอในโฟลเดอร์ img  img/lesson1.mp4
 const VIDEO_POSTER  = "";                  // รูปปกวิดีโอ (ไม่ใส่ก็ได้) เช่น "img/lesson1-cover.jpg"
 
 /* ★★★ อินโฟกราฟิก — จุดที่ต้องมาใส่รูปของคุณ ★★★
@@ -651,11 +651,11 @@ const VIDEO_POSTER  = "";                  // รูปปกวิดีโอ 
            3) บันทึกแล้วอัปขึ้น GitHub
    ผล: รูปจะแสดงเต็มความกว้างในหัวข้อ "2 อินโฟกราฟิก" และกดที่รูปเพื่อขยายได้
    ถ้าเว้นว่างไว้ (""), หรือชื่อไฟล์ไม่ตรง/ไม่มีไฟล์ → จะแสดงอินโฟกราฟิกตัวอย่าง 4 ยุคแทน */
-const INFOGRAPHIC_IMG = "img/dd.png";                // ← ใส่ชื่อรูปตรงนี้ เช่น "img/lesson1-infographic.png"
+const INFOGRAPHIC_IMG = "img/dd1.png";                // ← ใส่ชื่อรูปตรงนี้ เช่น "img/lesson1-infographic.png"
 
 // --- เอกสารก่อนสอน: เพิ่ม/ลบรายการได้ (ไฟล์ไว้ในโฟลเดอร์ img) ---
 const DOCS = [
-  { title:"ใบความรู้ก่อนเรียน บทที่ 1", desc:"สรุปเนื้อหาและแนวคิดสำคัญที่ควรอ่านก่อนเริ่มสถานการณ์จำลอง", file:"img/lesson1-handout.pdf" }
+  { title:"ใบความรู้ประกอบการเรียน บทที่ 1", desc:"สรุปเนื้อหาและแนวคิดสำคัญที่ควรอ่านก่อนเริ่มสถานการณ์จำลอง", file:"img/bb.pdf" }
   // , { title:"ใบงาน", desc:"...", file:"img/lesson1-worksheet.pdf" }
 ];
 
@@ -763,7 +763,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeNav(); 
   const fail = () => box.classList.add("missing");
   if (VIDEO_YOUTUBE){
     const f = document.createElement("iframe");
-    f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(VIDEO_YOUTUBE) + "?rel=0";
+    f.src = "https://www.youtube.com/embed/-Go8x80c1DU?si=yVUy4kaWlFeYcrAJ" + encodeURIComponent(VIDEO_YOUTUBE) + "?rel=0";
     f.title = "คลิปวิดีโอบทเรียนที่ 1";
     f.allow = "accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen";
     f.allowFullscreen = true; f.loading = "lazy";

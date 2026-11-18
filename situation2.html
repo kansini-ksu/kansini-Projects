@@ -438,12 +438,12 @@
           <!-- ★ แก้ข้อความคำอธิบายสถานการณ์ตรงนี้ได้เลย (ข้อความด้านล่างเป็นตัวอย่าง) -->
           <div class="story-head">
             <span class="si" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 0 4 20.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 1 1.5 1.5z"/></svg></span>
-            <h3>ชื่อสถานการณ์ (แก้ได้)</h3>
+            <h3>ตลาดไร้เงินสด! ทำไมร้านค้าถึงเปลี่ยนมาใช้ QR Code?</h3>
           </div>
-          <p>เขียนคำอธิบายสั้นๆ ว่าในคลิปเกิดอะไรขึ้น ตัวละครคือใคร และกำลังเผชิญปัญหาอะไรเกี่ยวกับการเปลี่ยนแปลงของเทคโนโลยี</p>
+          <p>เจะเกิดอะไรขึ้น... เมื่อร้านค้าในตลาดชุมชนที่เคยรับแต่เงินสด เปลี่ยนมาใช้ระบบสแกนจ่ายเงินแทน?อะไรคือสาเหตุและปัจจัยที่ทำให้ร้านค้าตัดสินใจเปลี่ยนมาใช้เทคโนโลยีนี้? กดดูคลิปเพื่อร่วมสืบหาคำตอบไปพร้อมกัน!</p>
           <div class="watch">
             <span class="wi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
-            <p>ขณะดูคลิป ให้สังเกตว่าตัวละครเลือกใช้เทคโนโลยีอย่างไร และเกิดผลอะไรตามมา เพราะจะต้องใช้ข้อมูลนี้ตัดสินใจในขั้นถัดไป</p>
+            <p>ขณะดูคลิป ให้สังเกตว่าคุณป้าแม่ค้าและลูกค้าเลือกใช้เทคโนโลยีการชำระเงินอย่างไร และเกิดผลดีหรือความเปลี่ยนแปลงอะไรตามมาบ้าง</p>
           </div>
         </div>
       </section>
@@ -511,8 +511,8 @@ const MENU = [
 /* ★ คลิปวิดีโอสถานการณ์จำลอง — เลือกอย่างใดอย่างหนึ่ง
    วิธีใช้ไฟล์ของตัวเอง: เอาไฟล์ .mp4 ไปไว้ในโฟลเดอร์ img แล้วพิมพ์ชื่อไฟล์ที่ VIDEO_FILE
    วิธีใช้ YouTube: ใส่เฉพาะ ID (ตัวอักษรหลัง v= ในลิงก์) ที่ VIDEO_YOUTUBE — ถ้าใส่ จะใช้อันนี้ก่อน */
-const VIDEO_YOUTUBE = "";
-const VIDEO_FILE    = "img/situation2.mp4";
+const VIDEO_YOUTUBE = "S-rYH7p3wRg?si=FmXw1BRboU62xQGh";
+const VIDEO_FILE    = "";
 const VIDEO_POSTER  = "";                  // รูปปกวิดีโอ (ไม่ใส่ก็ได้) เช่น "img/situation2-cover.jpg"
 
 const NEXT_PAGE = "";                      // หน้าถัดไป (เว้นว่าง = ไปหน้า "ตัดสินใจ บทที่ 2" ตามเมนู)
@@ -616,7 +616,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeNav(); 
   const fail = () => box.classList.add("missing");
   if (VIDEO_YOUTUBE){
     const f = document.createElement("iframe");
-    f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(VIDEO_YOUTUBE) + "?rel=0";
+    f.src = "https://www.youtube.com/embed/S-rYH7p3wRg?si=FmXw1BRboU62xQGh" + encodeURIComponent(VIDEO_YOUTUBE) + "?rel=0";
     f.title = "คลิปสถานการณ์จำลอง บทที่ 2";
     f.allow = "accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen";
     f.allowFullscreen = true; f.loading = "lazy";

@@ -396,6 +396,72 @@
     background:rgba(255,255,255,.9);border:2px solid #f0ecd6;box-shadow:0 4px 0 var(--card-edge);
   }
 
+  /* ---------- ผลผ่าน/ไม่ผ่านเกณฑ์ ---------- */
+  .verdict{
+    max-width:60ch;margin:24px auto 0;padding:18px 22px;border-radius:26px;text-align:left;
+    display:flex;gap:16px;align-items:flex-start;border:2px solid;
+  }
+  .verdict[hidden]{display:none}
+  .verdict .vi{flex:none;width:52px;height:52px;border-radius:18px;display:grid;place-items:center;transform:rotate(-6deg)}
+  .verdict .vi svg{width:28px;height:28px;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;fill:none}
+  .verdict h3{font-size:clamp(1.1rem,2.4vw,1.3rem);font-weight:700;line-height:1.45;color:var(--ink)}
+  .verdict p{margin-top:6px;font-size:clamp(.95rem,1.9vw,1.02rem);line-height:1.8;color:var(--ink)}
+  .verdict.pass{background:var(--ok-bg);border-color:#bfe3cb;box-shadow:0 5px 0 #cfe8d7}
+  .verdict.pass .vi{background:var(--ok);box-shadow:0 4px 0 var(--ok-edge)}
+  .verdict.fail{background:var(--danger-bg);border-color:#f3cfc8;box-shadow:0 5px 0 #ebc2ba}
+  .verdict.fail .vi{background:var(--danger);box-shadow:0 4px 0 var(--danger-edge)}
+  @media (max-width:520px){.verdict{flex-direction:column;gap:12px}}
+
+  /* ---------- เฉลยข้อสอบ ---------- */
+  .review{max-width:800px;margin:clamp(30px,4.4vw,48px) auto 0;text-align:left}
+  .review[hidden]{display:none}
+  .rv-title{display:flex;align-items:center;gap:14px;font-size:clamp(1.25rem,2.8vw,1.6rem);font-weight:700;line-height:1.4;color:var(--ink)}
+  .rv-title svg{
+    flex:none;width:46px;height:46px;padding:11px;border-radius:16px;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;fill:none;
+    background:linear-gradient(145deg,#fbe786,#efc83f);box-shadow:0 4px 0 var(--y-edge),inset 0 2px 0 rgba(255,255,255,.6);transform:rotate(-6deg);
+  }
+  .rv-sub{margin:8px 0 18px 60px;font-size:.92rem;line-height:1.6;color:var(--ink-soft)}
+  .rv-msg{margin:0 0 14px;padding:14px 18px;border-radius:20px;background:#fffbe8;border:2px solid #f3e49a;color:var(--ink);line-height:1.7;font-size:.95rem}
+  .rv-msg[hidden]{display:none}
+  .rv-list{list-style:none;display:grid;gap:16px}
+  .rv-item{
+    padding:clamp(16px,2.6vw,24px);border-radius:28px;background:#fff;border:2px solid #f0ecd6;box-shadow:0 5px 0 var(--card-edge);
+  }
+  .rv-item.ok{border-color:#bfe3cb;box-shadow:0 5px 0 #cfe8d7}
+  .rv-item.bad{border-color:#f3cfc8;box-shadow:0 5px 0 #ebc2ba}
+  .rv-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+  .rv-no{
+    padding:3px 16px;border-radius:99px;font-weight:700;font-size:.95rem;color:var(--ink);
+    background:linear-gradient(180deg,#f9e27a,#f1cb43);box-shadow:0 3px 0 var(--y-edge);
+  }
+  .rv-res{padding:3px 14px;border-radius:99px;font-weight:700;font-size:.82rem;border:1.5px solid transparent}
+  .rv-item.ok .rv-res{background:var(--ok-bg);border-color:#bfe3cb;color:var(--ok)}
+  .rv-item.bad .rv-res{background:var(--danger-bg);border-color:#f3cfc8;color:var(--danger)}
+  .rv-item.skip .rv-res{background:#faf8ec;border-color:#ece8d0;color:var(--ink-soft)}
+  .rv-q{font-weight:600;font-size:clamp(1rem,2.1vw,1.1rem);line-height:1.7;color:var(--ink)}
+  .rv-ch{list-style:none;margin-top:14px;display:grid;gap:9px}
+  .rv-ch li{
+    display:flex;gap:12px;align-items:flex-start;padding:10px 14px;border-radius:18px;
+    background:#fffefa;border:2px solid #f0ecd6;font-size:.97rem;line-height:1.6;color:var(--ink);
+  }
+  .rv-ch .lt{
+    flex:none;min-width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+    background:#f6f3e0;border:1.5px solid #e5dfc4;font-weight:700;font-size:.9rem;
+  }
+  .rv-ch .ct{flex:1;min-width:0;padding-top:3px;overflow-wrap:anywhere}
+  .rv-ch .tg{flex:none;align-self:center;padding:2px 10px;border-radius:99px;font-size:.74rem;font-weight:700;white-space:nowrap}
+  .rv-ch li.right{background:var(--ok-bg);border-color:#9fd3b1}
+  .rv-ch li.right .lt{background:var(--ok);border-color:var(--ok);color:#fff}
+  .rv-ch li.right .tg{background:var(--ok);color:#fff}
+  .rv-ch li.wrong{background:var(--danger-bg);border-color:#ecb4aa}
+  .rv-ch li.wrong .lt{background:var(--danger);border-color:var(--danger);color:#fff}
+  .rv-ch li.wrong .tg{background:var(--danger);color:#fff}
+  @media (max-width:560px){
+    .rv-sub{margin-left:0}
+    .rv-ch li{flex-wrap:wrap}
+    .rv-ch .tg{margin-left:42px}
+  }
+
   /* ---------- แจ้งเตือนสั้นๆ (Toast) ---------- */
   .toast{
     position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom));z-index:90;
@@ -578,8 +644,28 @@
         <div class="rtrack" aria-hidden="true"><span id="rBar"></span></div>
       </div>
 
+      <div class="verdict" id="verdict" role="status" hidden>
+        <span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24" id="vSvg"></svg></span>
+        <div>
+          <h3 id="vTitle"></h3>
+          <p id="vText"></p>
+        </div>
+      </div>
+
       <p class="rnote" id="rNote"></p>
       <p class="rnote" id="rCompare" hidden></p>
+
+      <!-- เฉลยข้อสอบทั้ง 10 ข้อ (ข้อมูลเฉลยมาจาก Supabase ฟังก์ชัน get_quiz_review — ดูไฟล์ quiz_review.sql) -->
+      <section class="review" id="review" aria-labelledby="rvTitle" hidden>
+        <h3 class="rv-title" id="rvTitle">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h9"/></svg>
+          <span>เฉลยแบบทดสอบหลังเรียน</span>
+        </h3>
+        <p class="rv-sub">ดูว่าแต่ละข้อตอบอะไรไว้ และคำตอบที่ถูกต้องคืออะไร</p>
+        <p class="rv-msg" id="rvMsg" hidden></p>
+        <ol class="rv-list" id="rvList"></ol>
+      </section>
+
       <div class="actions">
         <a class="btn-ghost" href="decision2.html">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>กลับสู่การตัดสินใจ บทที่ 2
@@ -722,106 +808,107 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeNav(); 
    เฉลยอยู่ใน Supabase (ตาราง quiz_keys, quiz = posttest) ไม่ได้อยู่ในหน้านี้ ข้อที่ N ในหน้านี้ = q_no N ในตารางเฉลย
    ========================================================= */
 const QUIZ_ID = "posttest";
+const PASS_PERCENT = 60;       // ★ เกณฑ์ผ่าน (ร้อยละ) — ได้ตั้งแต่ค่านี้ขึ้นไปถือว่าผ่าน
 const LETTERS = ["ก", "ข", "ค", "ง"];
 const QUESTIONS = [
   {
-    text: "ข้อใดคือสาเหตุสำคัญที่ทำให้เทคโนโลยีมีการเปลี่ยนแปลงและพัฒนาอย่างต่อเนื่องตั้งแต่อดีตจนถึงปัจจุบัน",
+    text: "การเปลี่ยนแปลงเทคโนโลยีเครื่องซักผ้าจากอดีตจนถึงปัจจุบันสะท้อนให้เห็นถึงจุดประสงค์ใดของมนุษย์มากที่สุด?",
     points: 1,
     choices: [
-      "ความต้องการลดปริมาณทรัพยากรธรรมชาติ",
-      "การตอบสนองความต้องการและแก้ปัญหาของมนุษย์",
-      "การต้องการเพิ่มมลพิษทางสิ่งแวดล้อม",
-      "ความต้องการเพิ่มขั้นตอนการทำงานให้ซับซ้อนขึ้น"
+      "เพื่อความสวยงามของเครื่องใช้",
+      "เพื่อลดขนาดพื้นที่ในบ้าน",
+      "เพื่อเพิ่มความสะดวกสบายและลดการใช้แรงงานคน",
+      "เพื่อประหยัดพลังงานไฟฟ้า"
     ]
   },
   {
-    text: "ข้อใดเรียงลำดับพัฒนาการของเทคโนโลยีการสื่อสารจากอดีตมาถึงปัจจุบันได้ถูกต้อง",
+    text: "เครื่องมือทำความสะอาดเสื้อผ้าในยุคแรกที่มีลักษณะเป็นลูกคลื่นเพื่อช่วยผ่อนแรงในการขยี้ผ้าเรียกว่าอะไร?",
     points: 1,
     choices: [
-      "จดหมาย → โทรศัพท์บ้าน → โทรศัพท์มือถือสมาร์ตโฟน",
-      "โทรศัพท์มือถือสมาร์ตโฟน → โทรศัพท์บ้าน → จดหมาย",
-      "โทรศัพท์บ้าน → โทรศัพท์มือถือสมาร์ตโฟน → จดหมาย",
-      "โทรศัพท์มือถือสมาร์ตโฟน → จดหมาย → โทรศัพท์บ้าน"
+      "เครื่องซักผ้าแบบก้านโยก",
+      "กระดานซักผ้า",
+      "ไม้ตีผ้า",
+      "เครื่องซักผ้าถังเดี่ยว"
     ]
   },
   {
-    text: "ข้อใดเป็นผลดีของการพัฒนาเทคโนโลยีที่มีต่อชีวิตประจำวัน",
+    text: "เทคโนโลยีฟาร์มอัจฉริยะ(SmartFarm)ในการเพาะเห็ดนำสิ่งใดมาช่วยในการควบคุมอุณหภูมิและความชื้นแบบอัตโนมัติ?",
     points: 1,
     choices: [
-      "ใช้เวลาในการทำงานมากขึ้น",
-      "ติดต่อสื่อสารกับผู้อื่นได้ยากขึ้น",
-      "เข้าถึงข้อมูลข่าวสารได้สะดวกและรวดเร็วขึ้น",
-      "ต้องใช้แรงงานคนมากขึ้น"
+      "การใช้แรงงานคนเดินตรวจจับ",
+      "ระบบเซ็นเซอร์และแอปพลิเคชันบนสมาร์ตโฟน",
+      "เการใช้เทอร์โมมิเตอร์วัดด้วยตาเปล่า",
+      "การกางสแลนกันแดด"
     ]
   },
   {
-    text: "ข้อใดเป็นผลกระทบด้านลบที่อาจเกิดจากการใช้เทคโนโลยีมากเกินไป",
+    text: "ข้อใดคือข้อจำกัดของการเพาะเห็ดแบบดั้งเดิม(เก็บตามฤดูกาล)ที่ทำให้เกิดการพัฒนาโรงเพาะเห็ด?",
     points: 1,
     choices: [
-      "ได้รับข้อมูลข่าวสารที่ทันสมัย",
-      "ทำงานได้รวดเร็วขึ้น",
-      "มีช่องทางการเรียนรู้เพิ่มขึ้น",
-      "เกิดปัญหาสุขภาพ เช่น สายตาเสื่อม และพูดคุยกับคนรอบข้างน้อยลง"
+      "เห็ดมีรสชาติไม่อร่อย",
+      "ต้องอาศัยความอุดมสมบูรณ์และความชื้นตามธรรมชาติ",
+      "เห็ดมีราคาแพงเกินไป",
+      "มีเห็ดหลากหลายสายพันธุ์เกินไป"
     ]
   },
   {
-    text: "ข้อใดเป็นหลักการที่เหมาะสมที่สุดในการเลือกใช้เทคโนโลยี",
+    text: "เตาชนิดใดที่ทำงานโดยอาศัยหลักการเหนี่ยวนำของสนามแม่เหล็กและมีความปลอดภัยสูงเนื่องจากไม่มีความร้อนที่บริเวณพื้นผิวเตา?",
     points: 1,
     choices: [
-      "เลือกตามความนิยมของคนรอบข้าง",
-      "เลือกให้เหมาะสมกับความต้องการและวัตถุประสงค์ของการใช้งาน",
-      "เลือกเทคโนโลยีที่มีราคาแพงที่สุดเสมอ",
-      "เลือกตามความสวยงามของรูปลักษณ์ภายนอก"
+      "เตาไฟฟ้า",
+      "เตาอั้งโล่",
+      "เตาแก๊ส",
+      "เตาแม่เหล็กไฟฟ้า"
     ]
   },
   {
-    text: "เทคโนโลยีหมายถึงข้อใด",
+   text: "การถนอมอาหารประเภทนมด้วยวิธี UHT (Ultra High Temperature) มีจุดเด่นในเรื่องใด?",
     points: 1,
     choices: [
-      "การนำความรู้ทางวิทยาศาสตร์มาประยุกต์ใช้เพื่อแก้ปัญหาและอำนวยความสะดวกในการดำรงชีวิต",
-      "เครื่องคอมพิวเตอร์และอินเทอร์เน็ตเท่านั้น",
-      "สิ่งของที่นำเข้ามาจากต่างประเทศ",
-      "เครื่องจักรที่ใช้ในโรงงานอุตสาหกรรมเท่านั้น"
+      "ไม่มีการทำลายเชื้อจุลินทรีย์เลย",
+      "นมมีอายุการเก็บรักษา 7-10 วัน และต้องแช่ตู้เย็น",
+      "เก็บรักษาได้นาน 6-8 เดือน โดยไม่ต้องแช่เย็น",
+      "เปลี่ยนน้ำนมให้กลายเป็นนมผง"
     ]
   },
   {
-    text: "ข้อใดแสดงการเปลี่ยนแปลงของเทคโนโลยีด้านการเรียนรู้จากอดีตสู่ปัจจุบันได้ถูกต้อง",
+    text: "หากเกษตรกรต้องการขยายพันธุ์กล้วยให้ได้ต้นอ่อนจำนวนมากมีขนาดสม่ำเสมอและปราศจากโรค ควรเลือกใช้วิธีใด?",
     points: 1,
     choices: [
-      "จากการเรียนผ่านสื่อออนไลน์ เปลี่ยนเป็นการเรียนจากหนังสืออย่างเดียว",
-      "จากการเรียนผ่านโทรทัศน์ เปลี่ยนเป็นการเรียนด้วยกระดานชนวน",
-      "จากการเรียนในห้องเรียนและหนังสือเป็นหลัก เปลี่ยนเป็นการเรียนรู้ผ่านสื่อออนไลน์ได้ทุกที่ทุกเวลา",
-      "จากการเรียนผ่านแอปพลิเคชัน เปลี่ยนเป็นการจดบันทึกด้วยมือเท่านั้น"
+      "การเพาะเมล็ด",
+      "การแยกหน่อ",
+      "การผ่าหน่อ",
+      "การเพาะเลี้ยงเนื้อเยื่อ"
     ]
   },
   {
-    text: "ข้อใดเป็นการใช้เทคโนโลยีอย่างรับผิดชอบ",
+    text: ". การพัฒนารถไถนาจาก 'รถไถนาเดินตาม' เป็น 'รถไถอเนกประสงค์' มีข้อดีอย่างไร?",
     points: 1,
     choices: [
-      "นำรูปภาพของผู้อื่นไปเผยแพร่โดยไม่ขออนุญาต",
-      "แชร์ข่าวทันทีโดยไม่ตรวจสอบความถูกต้อง",
-      "ใช้รหัสผ่านเดียวกันทุกบัญชีเพื่อความสะดวก",
-      "ตรวจสอบความถูกต้องของข้อมูลก่อนนำไปเผยแพร่ต่อ"
+      "ใช้แรงงานสัตว์ลากจูงได้",
+      "สามารถไถพรวนดินได้อย่างเดียว",
+      "ประหยัดแรงและสามารถทำงานได้หลายขั้นตอน เช่น ยกร่อง พรวนดิน ดันดิน",
+      "ไม่ต้องใช้น้ำมันเชื้อเพลิง"
     ]
   },
   {
-    text: "นักเรียนต้องการค้นคว้าข้อมูลเพื่อทำรายงาน ควรเลือกใช้เทคโนโลยีใดจึงเหมาะสมที่สุด",
+   text: "ข้อใดคือปัญหาหลักของ 'เตาก้อนเส้า' ที่ทำให้เกิดการพัฒนาเป็น 'เตาอั้งโล่'?",
     points: 1,
     choices: [
-      "เกมออนไลน์",
-      "เครื่องมือค้นหาข้อมูลและแหล่งความรู้ที่น่าเชื่อถือ",
-      "แอปพลิเคชันดูวิดีโอบันเทิงเพียงอย่างเดียว",
-      "โปรแกรมแชตเพื่อพูดคุยเรื่องทั่วไป"
+      "ไม่สามารถเคลื่อนย้ายได้และไม่สามารถควบคุมความร้อนได้",
+      "ต้องใช้ไฟฟ้าในการทำความร้อน",
+      "มีความร้อนสูงเกินไปจนทำให้อาหารไหม้",
+      "ทำให้เกิดความร้อนที่ผิวเตาเป็นอันตราย"
     ]
   },
   {
-    text: "เหตุใดเราจึงควรติดตามการเปลี่ยนแปลงของเทคโนโลยีอยู่เสมอ",
+   text: "สิ่งประดิษฐ์ใดที่เป็นแนวคิดเบื้องต้นที่นำมาสู่การสร้าง 'กังหันน้ำชัยพัฒนา'?",
     points: 1,
     choices: [
-      "เพื่อซื้อของใหม่ทุกครั้งที่มีออกมา",
-      "เพื่อให้ทุกคนใช้เทคโนโลยีเหมือนกัน",
-      "เพื่อปรับตัวและเลือกใช้เทคโนโลยีให้เหมาะสมกับการเรียนและการทำงาน",
-      "เพื่อหลีกเลี่ยงการใช้เทคโนโลยีทั้งหมด"
+      "กระดานซักผ้า",
+      "หลุกวิดน้ำเข้านา",
+      "เตาอั้งโล่",
+      "ฟาร์มอัจฉริยะ"
     ]
   }
 ];
@@ -871,9 +958,82 @@ function showResult(score, total, already){
   $("rNote").textContent = already
     ? "คุณทำแบบทดสอบหลังเรียนไปแล้ว นี่คือคะแนนที่บันทึกไว้ในระบบ"
     : "ระบบบันทึกคะแนนหลังเรียนของคุณเรียบร้อยแล้ว";
+  showVerdict(score, total);
   showCompare(score, total);
+  loadReview();
   requestAnimationFrame(() => { $("rBar").style.width = (total ? Math.round(score / total * 100) : 0) + "%"; });
   window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* ข้อความผ่าน / ไม่ผ่านเกณฑ์ */
+function showVerdict(score, total){
+  const pct = total ? score / total * 100 : 0, shown = Math.round(pct);
+  const pass = pct >= PASS_PERCENT;
+  const box = $("verdict");
+  box.className = "verdict " + (pass ? "pass" : "fail");
+  $("vSvg").innerHTML = pass ? '<path d="M5 12.5l4.5 4.5L19 7.5"/>' : '<path d="M6 6l12 12M18 6L6 18"/>';
+  if (pass) {
+    $("vTitle").textContent = "ยินดีด้วย! คุณผ่านแบบทดสอบหลังเรียน";
+    $("vText").textContent = "คุณทำคะแนนได้ " + shown + "% ผ่านเกณฑ์ที่ตั้งไว้ (" + PASS_PERCENT + "%) ขอชื่นชมในความตั้งใจและความพยายามของคุณจากใจจริง " +
+      "ผลลัพธ์นี้แสดงให้เห็นว่าคุณเข้าใจเรื่องการเปลี่ยนแปลงของเทคโนโลยีได้เป็นอย่างดี ภูมิใจในตัวเองได้เลย " +
+      "และขอให้เรียนรู้สิ่งใหม่ๆ ต่อไปไม่หยุดพัฒนา เพราะความรู้ที่คุณมีจะช่วยให้ตัดสินใจเลือกใช้เทคโนโลยีได้อย่างชาญฉลาดและสร้างสรรค์";
+  } else {
+    $("vTitle").textContent = "น่าเสียดาย คุณทำแบบทดสอบไม่ผ่านเกณฑ์";
+    $("vText").textContent = "คุณทำคะแนนได้ " + shown + "% ซึ่งยังไม่ถึงเกณฑ์ " + PASS_PERCENT + "% ควรปรับปรุง และกลับไปเรียนใหม่อีกครั้ง " +
+      "ไม่ต้องท้อใจนะ ทุกความผิดพลาดคือโอกาสให้เราเรียนรู้ ลองดูเฉลยด้านล่างว่าพลาดข้อไหน แล้วทบทวนบทเรียนอีกรอบ คุณทำได้แน่นอน";
+  }
+  box.hidden = false;
+}
+
+/* เฉลยข้อสอบทั้ง 10 ข้อ — เฉลยเก็บใน Supabase ส่งมาให้เฉพาะคนที่ส่งแบบทดสอบแล้ว */
+async function loadReview(){
+  const sec = $("review"), list = $("rvList"), msg = $("rvMsg");
+  sec.hidden = false; list.innerHTML = ""; msg.hidden = true;
+  let data = null, error = null;
+  try { ({ data, error } = await sb.rpc("get_quiz_review", { p_quiz: QUIZ_ID })); } catch (e) { error = e; }
+  if (error || !Array.isArray(data)) {
+    const m = (error && error.message) || "";
+    msg.textContent = m.includes("get_quiz_review")
+      ? "ยังแสดงเฉลยไม่ได้ เพราะยังไม่ได้รัน quiz_review.sql ใน Supabase (แจ้งผู้สอน)"
+      : "โหลดเฉลยไม่สำเร็จ กรุณารีเฟรชหน้านี้อีกครั้ง";
+    msg.hidden = false;
+    return;
+  }
+  const byQ = {};
+  data.forEach(r => { byQ[r.q] = r; });
+  QUESTIONS.forEach((q, i) => {
+    const r = byQ[i + 1] || {};
+    const hasMine = r.mine !== null && r.mine !== undefined;
+    const right = hasMine && r.mine === r.correct;
+    const li = document.createElement("li");
+    li.className = "rv-item " + (right ? "ok" : hasMine ? "bad" : "skip");
+
+    const head = document.createElement("div"); head.className = "rv-head";
+    const no = document.createElement("span"); no.className = "rv-no"; no.textContent = "ข้อที่ " + (i + 1);
+    const res = document.createElement("span"); res.className = "rv-res";
+    res.textContent = right ? "✓ ตอบถูก" : hasMine ? "✗ ตอบผิด" : "ไม่มีคำตอบ";
+    head.append(no, res);
+
+    const qt = document.createElement("p"); qt.className = "rv-q"; qt.textContent = q.text;
+
+    const ul = document.createElement("ul"); ul.className = "rv-ch";
+    q.choices.forEach((c, n) => {
+      const isRight = n === r.correct, isMine = hasMine && n === r.mine;
+      const row = document.createElement("li");
+      if (isRight) row.className = "right"; else if (isMine) row.className = "wrong";
+      const lt = document.createElement("span"); lt.className = "lt"; lt.textContent = LETTERS[n];
+      const ct = document.createElement("span"); ct.className = "ct"; ct.textContent = c;
+      row.append(lt, ct);
+      if (isRight || isMine) {
+        const tg = document.createElement("span"); tg.className = "tg";
+        tg.textContent = isRight ? (isMine ? "✓ คำตอบของคุณ (ถูก)" : "✓ คำตอบที่ถูก") : "✗ คำตอบของคุณ";
+        row.appendChild(tg);
+      }
+      ul.appendChild(row);
+    });
+    li.append(head, qt, ul);
+    list.appendChild(li);
+  });
 }
 
 /* เปรียบเทียบกับคะแนนก่อนเรียน (ถ้ามี) */

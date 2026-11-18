@@ -532,7 +532,7 @@
         <span class="chip-lesson">บทเรียนที่ 2</span>
         <h1 id="pageTitle">ผลกระทบของเทคโนโลยี</h1>   <!-- ★ ชื่อหัวข้อบทที่ 2 (ตัวอย่าง) แก้ได้ -->
         <span class="bar"></span>
-        <p class="lead">ดูวิดีโอ ศึกษาอินโฟกราฟิก และอ่านเอกสารก่อนสอน ให้ครบก่อนเริ่มทำสถานการณ์จำลอง</p>
+        <p class="lead">ดูวิดีโอ ศึกษาอินโฟกราฟิก และอ่านเอกสารใบความรู้ ให้ครบก่อนเริ่มทำสถานการณ์จำลอง</p>
       </header>
 
       <!-- 1) วิดีโอ -->
@@ -571,7 +571,7 @@
 
       <!-- 3) เอกสารก่อนสอน -->
       <section class="block" aria-labelledby="h-doc">
-        <div class="bh"><span class="bn">3</span><h2 id="h-doc">เอกสารก่อนสอน</h2></div>
+        <div class="bh"><span class="bn">3</span><h2 id="h-doc">เอกสารใบความรู้</h2></div>
         <p class="hint">เปิดอ่านบนหน้าเว็บ หรือดาวน์โหลดเก็บไว้ได้</p>
         <ul class="docs" id="docs"></ul>
       </section>
@@ -630,8 +630,8 @@ const MENU = [
    ตั้งค่าเนื้อหาบทเรียนที่ 2  (แก้เฉพาะส่วนนี้)
    ========================================================= */
 // --- วิดีโอ: เลือกอย่างใดอย่างหนึ่ง ---
-const VIDEO_YOUTUBE = "";                  // ใส่ ID ของ YouTube เช่น "dQw4w9WgXcQ" (ถ้าใส่ จะใช้อันนี้ก่อน)
-const VIDEO_FILE    = "img/lesson2.mp4";   // หรือไฟล์วิดีโอในโฟลเดอร์ img
+const VIDEO_YOUTUBE = "fHuNpxCDC28?si=hjJv6-o3quTsSK3S";                  // ใส่ ID ของ YouTube เช่น "dQw4w9WgXcQ" (ถ้าใส่ จะใช้อันนี้ก่อน)
+const VIDEO_FILE    = "";   // หรือไฟล์วิดีโอในโฟลเดอร์ img
 const VIDEO_POSTER  = "";                  // รูปปกวิดีโอ (ไม่ใส่ก็ได้) เช่น "img/lesson2-cover.jpg"
 
 /* ★★★ อินโฟกราฟิก — จุดที่ต้องมาใส่รูปของคุณ ★★★
@@ -640,11 +640,11 @@ const VIDEO_POSTER  = "";                  // รูปปกวิดีโอ 
            3) บันทึกแล้วอัปขึ้น GitHub
    ผล: รูปจะแสดงเต็มความกว้างในหัวข้อ "2 อินโฟกราฟิก" และกดที่รูปเพื่อขยายได้
    ถ้าเว้นว่างไว้ (""), หรือชื่อไฟล์ไม่ตรง/ไม่มีไฟล์ → จะแสดงอินโฟกราฟิกตัวอย่าง 4 ยุคแทน */
-const INFOGRAPHIC_IMG = "img/lesson2-infographic.png";                // ← ใส่ชื่อรูปตรงนี้ เช่น "img/lesson2-infographic.png"
+const INFOGRAPHIC_IMG = "img/dd2.png";                // ← ใส่ชื่อรูปตรงนี้ เช่น "img/lesson2-infographic.png"
 
 // --- เอกสารก่อนสอน: เพิ่ม/ลบรายการได้ (ไฟล์ไว้ในโฟลเดอร์ img) ---
 const DOCS = [
-  { title:"ใบความรู้ก่อนเรียน บทที่ 2", desc:"สรุปเนื้อหาและแนวคิดสำคัญที่ควรอ่านก่อนเริ่มสถานการณ์จำลอง", file:"img/lesson2-handout.pdf" }
+  { title:"ใบความรู้ประกอบการเรียน บทที่ 2", desc:"สรุปเนื้อหาและแนวคิดสำคัญที่ควรอ่านก่อนเริ่มสถานการณ์จำลอง", file:"img/ag.pdf" }
   // , { title:"ใบงาน", desc:"...", file:"img/lesson2-worksheet.pdf" }
 ];
 
@@ -749,7 +749,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeNav(); 
   const fail = () => box.classList.add("missing");
   if (VIDEO_YOUTUBE){
     const f = document.createElement("iframe");
-    f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(VIDEO_YOUTUBE) + "?rel=0";
+    f.src = "https://www.youtube.com/embed/fHuNpxCDC28?si=hjJv6-o3quTsSK3S" + encodeURIComponent(VIDEO_YOUTUBE) + "?rel=0";
     f.title = "คลิปวิดีโอบทเรียนที่ 2";
     f.allow = "accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen";
     f.allowFullscreen = true; f.loading = "lazy";
@@ -792,7 +792,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeNav(); 
     li.className = "doc";
     li.innerHTML = `
       <span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span>
-      <div class="meta"><b>${esc(d.title)}</b><span>${esc(d.desc||"")}</span><em hidden>ยังไม่ได้อัปโหลดไฟล์นี้</em></div>
+      <div class="meta"><b>${esc(d.title)}</b><span>${esc(d.desc||"")}</div>
       <div class="go">
         <a class="main" href="${esc(d.file)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>เปิดอ่าน</a>
         <a href="${esc(d.file)}" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>ดาวน์โหลด</a>
