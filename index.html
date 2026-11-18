@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>แอปพลิเคชันแบบสถานการณ์จำลอง | การเปลี่ยนแปลงของเทคโนโลยี</title>
 <meta name="description" content="แอปพลิเคชันแบบสถานการณ์จำลอง เรื่อง การเปลี่ยนแปลงของเทคโนโลยี">
+
+<!-- ================= โลโก้เว็บไซต์ =================
+     ★ แก้ 2 อย่างตรงนี้: (1) ชื่อไฟล์โลโก้ img/logo.png ให้ตรงกับไฟล์จริงในโฟลเดอร์ img
+                          (2) https://YOUR-SITE.vercel.app เป็นลิงก์เว็บจริงของคุณ (ต้องเป็นลิงก์เต็ม ใช้กับตอนแชร์ลิงก์) -->
+<link rel="icon" href="img/logo.png?v=1">
+<link rel="apple-touch-icon" href="img/logo.png?v=1">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="th_TH">
+<meta property="og:title" content="แอปพลิเคชันแบบสถานการณ์จำลอง | การเปลี่ยนแปลงของเทคโนโลยี">
+<meta property="og:description" content="แอปพลิเคชันแบบสถานการณ์จำลอง เรื่อง การเปลี่ยนแปลงของเทคโนโลยี">
+<meta property="og:image" content="https://YOUR-SITE.vercel.app/img/logo.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://YOUR-SITE.vercel.app/img/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@300;400;500;600&family=Mitr:wght@400;500;600&family=Prompt:wght@400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -476,6 +489,58 @@
     @keyframes cardIn{from{opacity:0;transform:translateY(50px) scale(.92)}}
   }
 
+  /* =====================================================================
+     ★ แก้ความกระตุกของฟอร์มล็อกอิน "เฉพาะมือถือ/แท็บเล็ต" (คอมพิวเตอร์ไม่ถูกแตะ)
+     สาเหตุ: เดิมแอนิเมชันใช้ clip-path + เบลอเนื้อหา + ขยับตำแหน่งมุม ซึ่งมือถือคำนวณหนัก
+     วิธีแก้: ใช้ขอบมนธรรมดา + เฟด/เลื่อนด้วย transform/opacity (ลื่นกว่ามาก) หน้าตาเหมือนเดิม
+     ===================================================================== */
+  @media (max-width:900px), (hover:none) and (pointer:coarse){
+    .flip-inner,.flip-inner.m-out{
+      --r:26px;
+      clip-path:none;border-radius:26px;overflow:hidden;isolation:isolate;
+      transition:height .35s cubic-bezier(.4,.2,.2,1),transform .3s cubic-bezier(.2,.8,.2,1);
+    }
+    .flip-inner.m-out{transform:scale(.97)}
+    .flip-inner::before,.flip-inner.m-out::before{clip-path:none;border-radius:24.5px}
+    .flip-inner.m-out::after{animation:sheenX .6s ease-in-out}
+
+    /* เงาเรืองใต้การ์ด: ลดเบลอ และไม่ย่อ/ขยายตอนสลับฟอร์ม */
+    .flip::before{filter:blur(22px);transition:none}
+    .flip:has(.flip-inner.m-out)::before{opacity:.45;transform:none}
+
+    /* ไม่ใช้แสงเรือง/วงแหวนขยาย (ภาพใหญ่ กินเครื่องมือถือ) */
+    .core,.ring{display:none}
+
+    /* มุมการ์ดอยู่กับที่ ไม่วิ่งเข้ากลาง (เดิมขยับ left/top/width/height ทุกเฟรม) */
+    .flip-inner.m-out .corner,.flip-inner.m-out .corner.tl,.flip-inner.m-out .corner.br{
+      transition:none;opacity:.85;width:60px;height:60px;
+    }
+    .flip-inner.m-out .corner.tl{left:0;top:0}
+    .flip-inner.m-out .corner.br{right:0;bottom:0}
+    .flip-inner.intro .corner.tl,.flip-inner.intro .corner.br{animation:none}
+
+    /* สลับหน้าล็อกอิน ↔ ลงทะเบียน: เฟด + เลื่อนเล็กน้อย ไม่เบลอ */
+    .face{filter:none;transform:translateY(8px);transition:opacity .2s,transform .2s,visibility 0s .2s}
+    .face.active{filter:none;transform:none;transition:opacity .35s .08s,transform .35s .08s cubic-bezier(.2,.8,.2,1),visibility 0s}
+    .flip-inner.m-out .face.active{opacity:0;filter:none;transform:translateY(-8px);transition:opacity .18s,transform .25s ease}
+
+    /* ตอนเปิดหน้าเว็บ: การ์ดเลื่อนขึ้นมา แล้วเนื้อหาเฟดเข้า */
+    .flip-inner.intro{animation:cardIn .7s .2s cubic-bezier(.2,.8,.2,1) backwards}
+    .flip-inner.intro .core,.flip-inner.intro .ring.r1,.flip-inner.intro .ring.r2{animation:none}
+    .flip-inner.intro .face.active{animation:faceInM .5s .5s ease-out backwards}
+    @keyframes faceInM{from{opacity:0;transform:translateY(10px)}}
+
+    /* แสงวิ่งบนปุ่ม: เปลี่ยนจากขยับ left (หนัก) เป็น transform (เบา) เส้นทางเท่าเดิม */
+    .btn::before{left:0;transform:translateX(-175%) skewX(-20deg);animation-name:shineM}
+    @keyframes shineM{
+      0%,55%{transform:translateX(-175%) skewX(-20deg)}
+      100%{transform:translateX(325%) skewX(-20deg)}
+    }
+
+    /* ช่องกรอก: ไม่ต้องขยับขึ้น 1px ตอนแตะ (มือถือไม่มี hover ทำให้ตัวหนังสือสั่น) */
+    .field input:focus{transform:none}
+  }
+
 </style>
 </head>
 <body>
@@ -803,13 +868,16 @@ function show(which){
   const want = which === "login" ? "faceLogin" : "faceRegister";
   if (morphBusy || $(want).classList.contains("active")) return;
   morphBusy = true;
+  /* มือถือ: จังหวะสั้นลงให้ลื่น / คอมพิวเตอร์: ค่าเดิมทุกอย่าง */
+  const fast = window.matchMedia && matchMedia("(max-width:900px), (hover:none) and (pointer:coarse)").matches;
+  const T = fast ? {icon:200, swap:220, open:600, done:1100} : {icon:600, swap:720, open:1450, done:2350};
   const inner = $("flipInner");
   inner.classList.remove("intro");
   inner.classList.add("m-out");                                   /* เนื้อหาเบลอหาย + การ์ดทั้งใบและแท็บมุมยุบเข้ากลาง */
-  setTimeout(() => inner.classList.add("m-icon"), 600);           /* ไอคอนเรืองแสง + วงแหวนกระจาย */
-  setTimeout(() => swapFace(which), 720);                         /* สลับฟอร์ม (ตอนนี้มองไม่เห็นเนื้อหา) */
-  setTimeout(() => { inner.classList.remove("m-out", "m-icon"); inner.classList.add("m-open"); }, 1450);  /* การ์ดและแท็บมุมแยกออก + คลื่นขยาย + ฟอร์มใหม่ชัดขึ้น */
-  setTimeout(() => { inner.classList.remove("m-open"); morphBusy = false; }, 2350);
+  setTimeout(() => inner.classList.add("m-icon"), T.icon);           /* ไอคอนเรืองแสง + วงแหวนกระจาย */
+  setTimeout(() => swapFace(which), T.swap);                         /* สลับฟอร์ม (ตอนนี้มองไม่เห็นเนื้อหา) */
+  setTimeout(() => { inner.classList.remove("m-out", "m-icon"); inner.classList.add("m-open"); }, T.open);  /* การ์ดและแท็บมุมแยกออก + คลื่นขยาย + ฟอร์มใหม่ชัดขึ้น */
+  setTimeout(() => { inner.classList.remove("m-open"); morphBusy = false; }, T.done);
 }
 $("faceRegister").inert = true;
 fitFlip();
