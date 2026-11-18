@@ -490,45 +490,51 @@
   }
 
   /* =====================================================================
-     ★ แก้ความกระตุกของฟอร์มล็อกอิน "เฉพาะมือถือ/แท็บเล็ต" (คอมพิวเตอร์ไม่ถูกแตะ)
-     สาเหตุ: เดิมแอนิเมชันใช้ clip-path + เบลอเนื้อหา + ขยับตำแหน่งมุม ซึ่งมือถือคำนวณหนัก
-     วิธีแก้: ใช้ขอบมนธรรมดา + เฟด/เลื่อนด้วย transform/opacity (ลื่นกว่ามาก) หน้าตาเหมือนเดิม
+     ★ ฟอร์มล็อกอินบนมือถือ/แท็บเล็ต: คงเอฟเฟกต์ยุบเป็นไอคอนเหมือนบนคอม แต่ทำให้ลื่นขึ้น (คอมไม่ถูกแตะ)
+     สาเหตุที่กระตุก: เดิมใช้ตัวแปร CSS ที่เปลี่ยนทุกเฟรมแล้วส่งต่อให้ทุกองค์ประกอบในการ์ดคำนวณใหม่ + เบลอเนื้อหา
+     วิธีแก้: ให้ clip-path เคลื่อนที่ตรง ๆ (ไม่ผ่านตัวแปร) + ตัดเบลอออก ใช้ขนาด/ความโปร่งใสแทน
      ===================================================================== */
   @media (max-width:900px), (hover:none) and (pointer:coarse){
-    .flip-inner,.flip-inner.m-out{
-      --r:26px;
-      clip-path:none;border-radius:26px;overflow:hidden;isolation:isolate;
-      transition:height .35s cubic-bezier(.4,.2,.2,1),transform .3s cubic-bezier(.2,.8,.2,1);
+    /* กรอบการ์ด: ยุบ/ขยายด้วย clip-path ตรง ๆ จังหวะเวลาเท่าบนคอม */
+    .flip-inner{
+      transform:translateZ(0);
+      clip-path:inset(0 0 0 0 round 26px);
+      transition:height .5s cubic-bezier(.4,.2,.2,1),clip-path .6s cubic-bezier(.65,0,.35,1);
     }
-    .flip-inner.m-out{transform:scale(.97)}
-    .flip-inner::before,.flip-inner.m-out::before{clip-path:none;border-radius:24.5px}
-    .flip-inner.m-out::after{animation:sheenX .6s ease-in-out}
-
-    /* เงาเรืองใต้การ์ด: ลดเบลอ และไม่ย่อ/ขยายตอนสลับฟอร์ม */
-    .flip::before{filter:blur(22px);transition:none}
-    .flip:has(.flip-inner.m-out)::before{opacity:.45;transform:none}
-
-    /* ไม่ใช้แสงเรือง/วงแหวนขยาย (ภาพใหญ่ กินเครื่องมือถือ) */
-    .core,.ring{display:none}
-
-    /* มุมการ์ดอยู่กับที่ ไม่วิ่งเข้ากลาง (เดิมขยับ left/top/width/height ทุกเฟรม) */
-    .flip-inner.m-out .corner,.flip-inner.m-out .corner.tl,.flip-inner.m-out .corner.br{
-      transition:none;opacity:.85;width:60px;height:60px;
+    .flip-inner.m-out{
+      clip-path:inset(calc(50% - 36px) calc(50% - 36px) calc(50% - 36px) calc(50% - 36px) round 24px);
+      transition:height .5s cubic-bezier(.4,.2,.2,1),clip-path .62s .06s cubic-bezier(.65,0,.35,1);
     }
-    .flip-inner.m-out .corner.tl{left:0;top:0}
-    .flip-inner.m-out .corner.br{right:0;bottom:0}
-    .flip-inner.intro .corner.tl,.flip-inner.intro .corner.br{animation:none}
+    /* เนื้อการ์ดสีขาว: ตอนหดหดก่อน ตอนขยายตามมาทีหลัง */
+    .flip-inner::before{
+      clip-path:inset(0 0 0 0 round 24.5px);
+      transition:clip-path .72s .16s cubic-bezier(.65,0,.35,1),background .4s;
+    }
+    .flip-inner.m-out::before{
+      clip-path:inset(calc(50% - 36px) calc(50% - 36px) calc(50% - 36px) calc(50% - 36px) round 22.5px);
+      transition:clip-path .55s cubic-bezier(.65,0,.35,1),background .4s;
+    }
 
-    /* สลับหน้าล็อกอิน ↔ ลงทะเบียน: เฟด + เลื่อนเล็กน้อย ไม่เบลอ */
-    .face{filter:none;transform:translateY(8px);transition:opacity .2s,transform .2s,visibility 0s .2s}
-    .face.active{filter:none;transform:none;transition:opacity .35s .08s,transform .35s .08s cubic-bezier(.2,.8,.2,1),visibility 0s}
-    .flip-inner.m-out .face.active{opacity:0;filter:none;transform:translateY(-8px);transition:opacity .18s,transform .25s ease}
+    /* ตอนเปิดหน้าเว็บ: การ์ดเลื่อนขึ้นมา แล้วขยายออกจากก้อนไอคอน */
+    .flip-inner.intro{
+      animation:cardIn .8s .3s cubic-bezier(.2,.8,.2,1) backwards,cardExpandM .65s 1.25s cubic-bezier(.65,0,.35,1) backwards;
+    }
+    .flip-inner.intro::before{animation:cardExpandBodyM .72s 1.41s cubic-bezier(.65,0,.35,1) backwards}
+    @keyframes cardExpandM{0%{clip-path:inset(calc(50% - 36px) calc(50% - 36px) calc(50% - 36px) calc(50% - 36px) round 24px)}100%{clip-path:inset(0 0 0 0 round 26px)}}
+    @keyframes cardExpandBodyM{0%{clip-path:inset(calc(50% - 36px) calc(50% - 36px) calc(50% - 36px) calc(50% - 36px) round 22.5px)}100%{clip-path:inset(0 0 0 0 round 24.5px)}}
 
-    /* ตอนเปิดหน้าเว็บ: การ์ดเลื่อนขึ้นมา แล้วเนื้อหาเฟดเข้า */
-    .flip-inner.intro{animation:cardIn .7s .2s cubic-bezier(.2,.8,.2,1) backwards}
-    .flip-inner.intro .core,.flip-inner.intro .ring.r1,.flip-inner.intro .ring.r2{animation:none}
-    .flip-inner.intro .face.active{animation:faceInM .5s .5s ease-out backwards}
-    @keyframes faceInM{from{opacity:0;transform:translateY(10px)}}
+    /* เนื้อหาในฟอร์ม: ตัดเบลอ (หนักมากบนมือถือ) ใช้ย่อ/ขยาย + เฟดแทน */
+    .face{filter:none;transform:scale(.94);transition:opacity .3s,transform .3s,visibility 0s .3s}
+    .face.active{filter:none;transform:scale(1);transition:opacity .55s .12s,transform .55s .12s cubic-bezier(.2,.8,.2,1),visibility 0s}
+    .flip-inner.m-out .face.active{opacity:0;filter:none;transform:scale(.75);transition:opacity .25s,transform .45s cubic-bezier(.65,0,.35,1)}
+    .flip-inner.intro .face.active{animation:faceInM .9s 1.4s cubic-bezier(.2,.8,.2,1) backwards}
+    @keyframes faceInM{from{opacity:0;transform:scale(.85)}}
+
+    /* วงแหวนคลื่นขยาย: ลดขนาดปลายทางลง (เดิมขยาย 10 เท่า ภาพใหญ่เกินไปสำหรับมือถือ) */
+    @keyframes expand{0%{transform:scale(.8);opacity:.95}100%{transform:scale(5);opacity:0}}
+
+    /* เงาเรืองใต้การ์ด: ลดเบลอให้เบาลง */
+    .flip::before{filter:blur(22px)}
 
     /* แสงวิ่งบนปุ่ม: เปลี่ยนจากขยับ left (หนัก) เป็น transform (เบา) เส้นทางเท่าเดิม */
     .btn::before{left:0;transform:translateX(-175%) skewX(-20deg);animation-name:shineM}
@@ -537,7 +543,7 @@
       100%{transform:translateX(325%) skewX(-20deg)}
     }
 
-    /* ช่องกรอก: ไม่ต้องขยับขึ้น 1px ตอนแตะ (มือถือไม่มี hover ทำให้ตัวหนังสือสั่น) */
+    /* ช่องกรอก: ไม่ขยับขึ้น 1px ตอนแตะ (มือถือไม่มี hover ทำให้ตัวหนังสือสั่น) */
     .field input:focus{transform:none}
   }
 
@@ -868,16 +874,13 @@ function show(which){
   const want = which === "login" ? "faceLogin" : "faceRegister";
   if (morphBusy || $(want).classList.contains("active")) return;
   morphBusy = true;
-  /* มือถือ: จังหวะสั้นลงให้ลื่น / คอมพิวเตอร์: ค่าเดิมทุกอย่าง */
-  const fast = window.matchMedia && matchMedia("(max-width:900px), (hover:none) and (pointer:coarse)").matches;
-  const T = fast ? {icon:200, swap:220, open:600, done:1100} : {icon:600, swap:720, open:1450, done:2350};
   const inner = $("flipInner");
   inner.classList.remove("intro");
   inner.classList.add("m-out");                                   /* เนื้อหาเบลอหาย + การ์ดทั้งใบและแท็บมุมยุบเข้ากลาง */
-  setTimeout(() => inner.classList.add("m-icon"), T.icon);           /* ไอคอนเรืองแสง + วงแหวนกระจาย */
-  setTimeout(() => swapFace(which), T.swap);                         /* สลับฟอร์ม (ตอนนี้มองไม่เห็นเนื้อหา) */
-  setTimeout(() => { inner.classList.remove("m-out", "m-icon"); inner.classList.add("m-open"); }, T.open);  /* การ์ดและแท็บมุมแยกออก + คลื่นขยาย + ฟอร์มใหม่ชัดขึ้น */
-  setTimeout(() => { inner.classList.remove("m-open"); morphBusy = false; }, T.done);
+  setTimeout(() => inner.classList.add("m-icon"), 600);           /* ไอคอนเรืองแสง + วงแหวนกระจาย */
+  setTimeout(() => swapFace(which), 720);                         /* สลับฟอร์ม (ตอนนี้มองไม่เห็นเนื้อหา) */
+  setTimeout(() => { inner.classList.remove("m-out", "m-icon"); inner.classList.add("m-open"); }, 1450);  /* การ์ดและแท็บมุมแยกออก + คลื่นขยาย + ฟอร์มใหม่ชัดขึ้น */
+  setTimeout(() => { inner.classList.remove("m-open"); morphBusy = false; }, 2350);
 }
 $("faceRegister").inert = true;
 fitFlip();
